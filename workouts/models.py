@@ -5,8 +5,16 @@ class Lift(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField()
 
-    def current_pr(self):
-        return self.prs.order_by('-date')[0]
+    def current_pr(self, user):
+        return self.prs.filter(user=user).order_by('-date')[0]
+
+    def __unicode__(self):
+        return self.name
+
+class ActiveLift(models.Model):
+    ''' Relates Users to the lifts they are currently working on. '''
+    user = models.ForeignKey(User, related_name='active_lifts')
+    lift = models.ForeignKey(Lift)
 
 class PR(models.Model):
     activity = models.CharField(max_length=100)
@@ -22,12 +30,12 @@ class LiftPR(PR):
     user = models.ForeignKey(User, related_name='liftprs')
     lift = models.ForeignKey(Lift, related_name='prs')
     reps = models.IntegerField()
-    weight = models.DecimalField(max_digits=20, decimal_places=2)
+    weight = models.DecimalField(max_digits=20, decimal_places=2)#weight in pounds.
 
     def calc_one_rep_max(self):
         # uses Jim Wendler's calculation for one rep max
         # (weight * reps * .0333) + weight = estimated_total
-        return (self.weight * self.reps * 0.0333) + self.weight
+        return (float(self.weight) * float(self.reps) * 0.0333) + float(self.weight)
 
 
 class TimeWODPR(PR):
