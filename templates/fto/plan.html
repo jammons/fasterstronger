@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block main %}
+<div id='plan'>
+    <h1>Workout For {{ user.username }}</h1>
+    <div id="active_lifts">
+        {% include "workouts/active_lifts.html" %}
+    </div>
+    <div id="week_plan">
+        {% include "fto/week_plan.html" %}
+    </div>
+</div>
+{% endblock %}

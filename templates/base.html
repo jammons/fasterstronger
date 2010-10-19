@@ -1,0 +1,26 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>FasterStronger</title>
+    <link rel="stylesheet" type="text/css" href="/css/screen.css" />
+    <!--[if lte IE 7]><link rel="stylesheet" type="text/css" href="/css/ie7.css" /><![endif]-->
+    <!--[if lte IE 6]><link rel="stylesheet" type="text/css" href="/css/ie6.css" /><![endif]-->
+    {% block head %}{% endblock %} 
+    {% block style %}{% endblock %}
+
+    <script type="text/javascript" src="/js/jquery.js"></script>
+    {% block script %}{% endblock %}
+
+</head>
+<body>
+    <div id="frame">
+        <div id="content-pane">
+            <div id="header">
+            </div>
+            {% block main %}
+            {% endblock %}
+            <div class="clear"></div>
+        </div>
+    </div>
+</body>
+</html>
