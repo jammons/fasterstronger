@@ -5,8 +5,7 @@ from django.shortcuts import render_to_response
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 
-from fasterstronger.fto.models import Plan
-from fasterstronger.workouts.models import Lift, ActiveLift, LiftPR
+from fasterstronger.fto.models import Plan, Lift, ActiveLift, LiftPR
 
 def plan(request, username):
     ''' This method is the primary display method for showing user's 
