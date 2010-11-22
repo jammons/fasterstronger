@@ -68,15 +68,16 @@ class ActiveLift(models.Model):
 class DailyRecord(models.Model):
     '''
     The record of a workout for a given day.
-    
+
     Should allow us to recreate something like this:
-    
+
     175x5
     190x5
     205x7
-    
+
     '''
-    date = models.DateTimeField(auto_add_now=True)
+    user = models.ForeignKey(User, related_name='fto_records')
+    date = models.DateTimeField(auto_now_add=True)
     lift = models.ForeignKey(Lift)
     first_set_reps = models.IntegerField()
     first_set_weight = models.DecimalField(max_digits=20, decimal_places=2)
@@ -84,7 +85,7 @@ class DailyRecord(models.Model):
     second_set_weight = models.DecimalField(max_digits=20, decimal_places=2)
     third_set_reps = models.IntegerField()
     third_set_weight = models.DecimalField(max_digits=20, decimal_places=2)
-    
+
     notes = models.CharField(max_length=500, blank=True)
 
 
