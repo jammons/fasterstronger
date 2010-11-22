@@ -1,0 +1,14 @@
+<h2>Workout for this week</h2>
+<table>
+{% for day in week_plan %}
+    <tr>
+    <th>Day {{ forloop.counter }}</th>
+    <th>{{ day.name }}</th>
+    <th>
+    {% for reps, weight in day.scheme %}
+        <p>{{ reps }} x {{ weight }}</p>
+    {% endfor %}
+    </th>
+    </tr>
+{% endfor %}
+</table>
