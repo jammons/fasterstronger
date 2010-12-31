@@ -4,10 +4,12 @@
 <div id='plan'>
     <h1>Workout For {{ user.username }}</h1>
     <h2>Week {{ week }}</h2>
-    <a href="{{ previous_week }}">Previous</a>
+    {% if previous_week %}
+        <a href="{{ previous_week }}">Previous</a>
+    {% endif %}
     <a href="{{ next_week }}">Next</a>
     <div id="active_lifts">
-        {% include "workouts/active_lifts.html" %}
+        {% include "fto/active_lifts.html" %}
     </div>
     <div id="week_plan">
         {% include "fto/week_plan.html" %}

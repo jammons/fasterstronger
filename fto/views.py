@@ -13,27 +13,37 @@ def plan(request, username):
     '''
     template_vars = {}
     user = User.objects.get(username=username)
-
-    # Calculate week
-    today = datetime.date.today()
     plan = user.plan
-    delta = datetime.date.today() - plan.cycle_start_date
-    days = abs(delta.days)
+
+    week = request.GET.get('week', None)
+    if week is None:
+        # Calculate week
+        today = datetime.date.today()
+        delta = datetime.date.today() - plan.cycle_start_date
+        days = delta.days
+        week = days/7
+        week = week + 1 #this isn't 0 indexed
+    else:
+        week = int(week)
 
     if week < 1:
         #TODO: add messaging to this
         return HttpResponse("No negative weeks")
-    week = int(week)
+
+    # Set template vars
     previous_week = week - 1
     next_week = week + 1
-    week_plan = plan.get_lifts(week)
 
-    lifts = user.active_lifts.all()
+    #calculate week plan
+    (week_plan, active_lifts) = plan.get_lifts(week)
 
     template_vars['user'] = user
     template_vars['week_plan'] = week_plan
+    template_vars['active_lifts'] = active_lifts
     template_vars['week'] = week
-    template_vars['next_week'] = reverse('week_plan', args=[user, week])
-        
-    template_vars['previous_week'] = previous_week
+    template_vars['next_week'] = '%s?week=%s' % (
+        reverse('plan', args=[user]), next_week)
+    if previous_week >= 1:
+        template_vars['previous_week'] = '%s?week=%s' % (
+            reverse('plan', args=[user]), previous_week)
     return render_to_response('fto/plan.html', template_vars)

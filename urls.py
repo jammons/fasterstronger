@@ -8,7 +8,7 @@ urlpatterns = patterns('',
     # Example:
     # (r'^fasterstronger/', include('fasterstronger.foo.urls')),
     (r'^plan/', include('fasterstronger.fto.urls')),
-    (r'^lifts/', include('fasterstronger.workout.urls')),
+    (r'^lifts/', include('fasterstronger.fto.urls')),
 
     # Uncomment the admin/doc line below and add 'django.contrib.admindocs' 
     # to INSTALLED_APPS to enable admin documentation:

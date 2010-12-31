@@ -1,9 +1,10 @@
 <div id="active_lifts">
-    {% for active_lift in user.active_lifts.all %}
+    {% for active_lift in active_lifts %}
         <h2>{{ active_lift.lift.name }}</h2>
         <p>{{ active_lift.lift.description }}</p>
         <p>Lift PR: {{ active_lift.current_pr.reps }}x{{ active_lift.current_pr.weight }}lbs</p>
         <p>Est. 1RM: {{ active_lift.current_pr.calc_one_rep_max }}lbs</p>
         <p>Measured 1RM: {{ active_lift.get_onerm.weight }}lbs</p>
+        <p>Working Weight: {{ active_lift.working_weight }}
     {% endfor %}
 </div>

@@ -17,22 +17,33 @@ class Plan(models.Model):
     weekly_workouts = models.IntegerField() #number of times in the gym in a week
     cycle_start_date = models.DateField()
 
+    def get_working_weight(self, active_lift, cycle):
+        ''' Returns the working weight calculated by lift and cycle. '''
+        weight = float(active_lift.get_onerm().weight) * .9
+        # Need to add extra weight past first cycle
+        weight = weight + (float(active_lift.increment) * cycle)
+        return weight
+
     def get_lifts(self, week):
         #return the active lifts for this user
         lifts = self.user.active_lifts.all()
+        cycle = (week-1)/4 #calculate cycles
+        week = week % 4
+        if week == 0: week = 4 #is there a better way to do this
 
         scheme = WEEK_SCHEME[week]
         days = []
         for lift in lifts:
-            reduced_max = .9 * float(lift.get_onerm().weight)
+            working_weight = self.get_working_weight(lift, cycle)
+            lift.working_weight = working_weight
             days.append({
                 'name': lift.lift.name,
                 'scheme': 
-                [(scheme[0][0], round_to_plate_size(scheme[0][1]*float(reduced_max), 2.5)),
-                (scheme[1][0], round_to_plate_size(scheme[1][1]*float(reduced_max), 2.5)),
-                (scheme[2][0], round_to_plate_size(scheme[2][1]*float(reduced_max), 2.5))]
+                [(scheme[0][0], round_to_plate_size(scheme[0][1]*float(working_weight), 2.5)),
+                (scheme[1][0], round_to_plate_size(scheme[1][1]*float(working_weight), 2.5)),
+                (scheme[2][0], round_to_plate_size(scheme[2][1]*float(working_weight), 2.5))]
             })
-        return days
+        return (days, lifts)
 
 
 class Lift(models.Model):
@@ -48,6 +59,7 @@ class ActiveLift(models.Model):
     user = models.ForeignKey(User, related_name='active_lifts')
     lift = models.ForeignKey(Lift)
     order = models.IntegerField(null=False, blank=False) #the order of this lift in the week
+    increment = models.DecimalField(default='5.0', max_digits=4, decimal_places=2)
 
     def current_pr(self):
         try:
@@ -92,7 +104,7 @@ class DailyRecord(models.Model):
 
 class PR(models.Model):
     date = models.DateField()
-    details = models.TextField()
+    details = models.TextField(blank=True)
 
     class Meta:
         abstract = True
