@@ -10,3 +10,10 @@ body
 {
     clear:both;
 }
+
+#active_lifts
+{
+    margin-left: 25px;
+    margin-right: 25px;
+    float: left;
+}
